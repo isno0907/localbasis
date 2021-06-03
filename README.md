@@ -3,7 +3,7 @@
 ![PyTorch 1.3](https://img.shields.io/badge/pytorch-1.3-green.svg)
 ![teaser](teaser1.png)
 ![teaser](teaser2.png)
-<p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized..</p>
+<p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized.</p>
 
 ## Setup
 1. Create environment: `conda create -n local_basis python=3.7`
