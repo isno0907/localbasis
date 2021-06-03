@@ -7,6 +7,9 @@ import sys
 from scipy.stats import ortho_group
 from notebook_utils import create_strip, create_strip_centered, pad_frames
 import pickle
+# from tqdm.notebook import tqdm
+# from tqdm import tqdm_notebook as tqdm
+from tqdm import tqdm
 
 def compute_grsm_metric(local_basis_1, local_basis_2, d = 1, metric_type = 'geodesic'):
     assert(metric_type in ['proj', 'geodesic'])
@@ -41,7 +44,7 @@ def evaluate_basis_consistency(model, eval_config, metric_type = 'geodesic'):
     rng = np.random.RandomState(eval_config.seed)
     
     metric_list = []
-    for _ in range(eval_config.n_samples):
+    for _ in tqdm(range(eval_config.n_samples)):
         local_basis_list = []
         for i in range(2):
             noise, z, z_local_basis, z_sv, noise_basis = get_random_local_basis(model, rng)
@@ -57,7 +60,7 @@ def evaluate_basis_consistency_local(model, eval_config, eps = 1e-1, metric_type
     rng = np.random.RandomState(eval_config.seed)
     
     metric_list = []
-    for _ in range(eval_config.n_samples):
+    for _ in tqdm(range(eval_config.n_samples)):
         local_basis_list = []
         noise, z, z_local_basis, z_sv, noise_basis = get_random_local_basis(model, rng)
         local_basis_list.append(z_local_basis)
@@ -84,7 +87,7 @@ def evaluate_basis_consistency_to_global(model, eval_config, global_basis, metri
     rng = np.random.RandomState(eval_config.seed)
     
     metric_list = []
-    for _ in range(eval_config.n_samples):
+    for _ in tqdm(range(eval_config.n_samples)):
         noise, z, z_local_basis, z_sv, noise_basis = get_random_local_basis(model, rng)
         metric = compute_grsm_metric(z_local_basis, global_basis, d = eval_config.subspace_dim,
                                    metric_type = metric_type)
@@ -104,7 +107,7 @@ def evaluate_random_basis_consistency(model, eval_config, metric_type = 'geodesi
     latent_dim = z_local_basis.shape[-1]
     
     metric_list = []
-    for _ in range(eval_config.n_samples):
+    for _ in tqdm(range(eval_config.n_samples)):
         local_basis_batch = ortho_group.rvs(dim=latent_dim, size=2, random_state = rng)
         local_basis_list = [local_basis_batch[0].transpose(), local_basis_batch[1].transpose()]
             
