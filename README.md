@@ -9,10 +9,12 @@
 1. Create environment: `conda create -n local_basis python=3.7`
 2. Activate environment: `conda activate local_basis`
 3. Install dependencies: `conda env update -f environment.yml --prune`
+```
+Optional
 4. `cd models/stylegan2/stylegan2-pytorch/op`
 5. `python setup.py install`
 6. Test: `python -c "import torch; import upfirdn2d_op; import fused; print('OK')"`
-
+```
 ## Usage
 All code is implemented in jupyter notebook.
 
