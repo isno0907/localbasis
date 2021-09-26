@@ -11,6 +11,9 @@ import pickle
 # from tqdm import tqdm_notebook as tqdm
 from tqdm import tqdm
 
+sys.path.insert(0, '..')
+from models import StyleGAN, StyleGAN2, BigGAN
+
 def compute_grsm_metric(local_basis_1, local_basis_2, d = 1, metric_type = 'geodesic'):
     assert(metric_type in ['proj', 'geodesic'])
     if metric_type == 'geodesic':
@@ -130,37 +133,39 @@ def LayerMode(layer_mode):
         layer_start = 0
         layer_end = 18
     return layer_start, layer_end
-def get_random_local_basis(model, random_state, noise = None):
+
+def get_random_local_basis(model, random_state, noise = None, noise_dim = 512):
     '''
+    noise_dim = 512 for StyleGAN, 128 for BigGAN
+    
+    ex)
     random_state = np.random.RandomState(seed)
     noise, z, z_local_basis, z_sv = get_random_local_basis(model, random_state)
     '''
-    
-    '''
-    z = model.sample_latent(n_samples = 1, seed=seed)   in GanSpace
-    : StyleGAN2.sample_latent(self, n_samples=1, seed=None, truncation=None)
-    '''
     n_samples = 1
     if noise is not None:
-        assert(list(noise.shape) == [n_samples, 512])
+        assert(list(noise.shape) == [n_samples, noise_dim])
         noise = noise.detach().float().to(model.device)
     else:
         noise = torch.from_numpy(
-                random_state.standard_normal(512 * n_samples)
-                .reshape(n_samples, 512)).float().to(model.device) #[N, 512]
+                random_state.standard_normal(noise_dim * n_samples)
+                .reshape(n_samples, noise_dim)).float().to(model.device) #[N, noise_dim]
     noise.requires_grad = True
-    if model.w_primary:
-        z = model.model.style(noise)
+    
+    if isinstance(model, StyleGAN2):
+        mapping_network = model.model.style
+    elif isinstance(model, StyleGAN):
+        mapping_network = model.model._modules['g_mapping'].forward 
+    elif isinstance(model, BigGAN):
+        mapping_network = model.partial_forward_explicit
     else:
-        z = noise
+        raise NotImplemented   
+    z = mapping_network(noise)
 
     ''' Compute Jacobian by batch '''
     noise_dim, z_dim = noise.shape[1], z.shape[1]
     noise_pad = noise.repeat(z_dim, 1).requires_grad_(True)
-    if model.w_primary:
-        z_pad = model.model.style(noise_pad)
-    else:
-        z_pad = noise_pad
+    z_pad = mapping_network(noise_pad)
 
     grad_output = torch.eye(z_dim).cuda()
     jacobian = torch.autograd.grad(z_pad, noise_pad, grad_outputs=grad_output, retain_graph=True)[0].cpu()
