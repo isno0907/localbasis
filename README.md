@@ -6,13 +6,16 @@
 <p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized.</p>
 
 ## Setup
+0. Change environment.yml CUDA version to yours [CUDA version must be 10.x]
 1. Create environment: `conda create -n local_basis python=3.7`
 2. Activate environment: `conda activate local_basis`
 3. Install dependencies: `conda env update -f environment.yml --prune`
+```
+Optional
 4. `cd models/stylegan2/stylegan2-pytorch/op`
 5. `python setup.py install`
 6. Test: `python -c "import torch; import upfirdn2d_op; import fused; print('OK')"`
-
+```
 ## Usage
 All code is implemented in jupyter notebook.
 
@@ -35,7 +38,11 @@ All code is implemented in jupyter notebook.
 
 ## License
 
+<<<<<<< HEAD
 The files `notebooks/ganspace_utils.py` and `notebooks/notebook_utils.py` are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
+=======
+The files `models/wrappers.py`, `notebooks/ganspace_utils.py` and `notebooks/notebook_utils.py` are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
+>>>>>>> 43a05e6ef69b2f36afa8b7793a91a644dca39c1f
 The directory `netdissect` is a derivative of the [GAN Dissection][gandissect] project, and is provided under the MIT license.<br>
 The directories `models/biggan` and `models/stylegan2` are provided under the MIT license.
 
