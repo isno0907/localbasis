@@ -3,7 +3,7 @@
 ![PyTorch 1.3](https://img.shields.io/badge/pytorch-1.3-green.svg)
 ![teaser](teaser1.png)
 ![teaser](teaser2.png)
-<p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized..</p>
+<p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized.</p>
 
 ## Setup
 1. Create environment: `conda create -n local_basis python=3.7`
@@ -35,7 +35,7 @@ All code is implemented in jupyter notebook.
 
 ## License
 
-The file notebooks/ganspace_utils.py and notebooks/notebook_utils.py are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
+The files `notebooks/ganspace_utils.py` and `notebooks/notebook_utils.py` are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
 The directory `netdissect` is a derivative of the [GAN Dissection][gandissect] project, and is provided under the MIT license.<br>
 The directories `models/biggan` and `models/stylegan2` are provided under the MIT license.
 
