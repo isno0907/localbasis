@@ -38,11 +38,7 @@ All code is implemented in jupyter notebook.
 
 ## License
 
-<<<<<<< HEAD
-The files `notebooks/ganspace_utils.py` and `notebooks/notebook_utils.py` are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
-=======
 The files `models/wrappers.py`, `notebooks/ganspace_utils.py` and `notebooks/notebook_utils.py` are a derivative of the [GANSpace][ganspace], and are provided under the [Apache 2.0](LICENSE) license.<br>
->>>>>>> 43a05e6ef69b2f36afa8b7793a91a644dca39c1f
 The directory `netdissect` is a derivative of the [GAN Dissection][gandissect] project, and is provided under the MIT license.<br>
 The directories `models/biggan` and `models/stylegan2` are provided under the MIT license.
 
