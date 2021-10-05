@@ -636,9 +636,10 @@ class BigGAN(BaseModel):
 
         # Generator forward
         z = self.model.generator.gen_z(cond_vectors[0])
+        #print(z.shape)
         z = z.view(-1, 4, 4, 16 * self.model.generator.config.channel_width)
         z = z.permute(0, 3, 1, 2).contiguous()
-
+        
         cond_idx = 1
         for i, layer in enumerate(self.model.generator.layers[:n_layers]):
             if isinstance(layer, biggan.GenBlock):
@@ -648,6 +649,52 @@ class BigGAN(BaseModel):
                 z = layer(z)
 
         return None
+    
+    # Run model only until given layer
+    # Used to compute Local Basis
+    def partial_forward_explicit(self, x, layer_name = 'generator.gen_z'):
+        assert layer_name != 'embeddings', f'embedding is not a function of noise'
+        
+        if layer_name in ['embeddings', 'generator.gen_z']:
+            n_layers = 0
+        elif 'generator.layers' in layer_name:
+            layer_base = re.match('^generator\.layers\.[0-9]+', layer_name)[0]
+            n_layers = int(layer_base.split('.')[-1]) + 1
+        else:
+            n_layers = len(self.model.config.layers)
+
+        if not isinstance(x, list):
+            x = self.model.n_latents*[x]
+
+        if isinstance(self.v_class, list):
+            labels = [c.repeat(x[0].shape[0], 1) for c in class_label]
+            embed = [self.model.embeddings(l) for l in labels]
+        else:
+            class_label = self.v_class.repeat(x[0].shape[0], 1)
+            embed = len(x)*[self.model.embeddings(class_label)]
+        
+        assert len(x) == self.model.n_latents, f'Expected {self.model.n_latents} latents, got {len(x)}'
+        assert len(embed) == self.model.n_latents, f'Expected {self.model.n_latents} class vectors, got {len(class_label)}'
+
+        cond_vectors = [torch.cat((z, e), dim=1) for (z, e) in zip(x, embed)]
+
+        # Generator forward
+        z = self.model.generator.gen_z(cond_vectors[0])
+        if layer_name == 'generator.gen_z':
+            #print(z.shape)
+            return z
+        z = z.view(-1, 4, 4, 16 * self.model.generator.config.channel_width)
+        z = z.permute(0, 3, 1, 2).contiguous()
+        
+        cond_idx = 1
+        for i, layer in enumerate(self.model.generator.layers[:n_layers]):
+            if isinstance(layer, biggan.GenBlock):
+                z = layer(z, cond_vectors[cond_idx], self.truncation)
+                cond_idx += 1
+            else:
+                z = layer(z)
+
+        return z
 
 # Version 1: separate parameters
 @singledispatch
