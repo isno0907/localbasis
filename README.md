@@ -6,6 +6,7 @@
 <p align="justify"><b>Figure 1:</b> Semantic factorization through constrained traversal. The examples are discovered by constraining the latent traversal to a subset of the layers. The subset is chosen among the coarse, middle, and fine layers defined by StyleGAN. It can be seen that semantics are well factorized.</p>
 
 ## Setup
+0. Change environment.yml CUDA version to yours [CUDA version must be 10.x]
 1. Create environment: `conda create -n local_basis python=3.7`
 2. Activate environment: `conda activate local_basis`
 3. Install dependencies: `conda env update -f environment.yml --prune`
