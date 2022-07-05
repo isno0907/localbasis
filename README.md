@@ -34,6 +34,12 @@ All code is implemented in jupyter notebook.
 
 ## Citation
 ```
+@article{choi2021not,
+  title={Do not escape from the manifold: Discovering the local coordinates on the latent space of GANs},
+  author={Choi, Jaewoong and Lee, Junho and Yoon, Changyeon and Park, Jung Ho and Hwang, Geonho and Kang, Myungjoo},
+  journal={arXiv preprint arXiv:2106.06959},
+  year={2021}
+}
 ```
 
 ## License
